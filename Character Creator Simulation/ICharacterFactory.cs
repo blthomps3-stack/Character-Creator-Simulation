@@ -10,4 +10,28 @@ namespace Character_Creator_Simulation
     {
         ICharacter CreateCharacter();
     }
+
+    public class HumanFactory : ICharacterFactory
+    {
+        public ICharacter CreateCharacter()
+        {
+            return new Human();
+        }
+    }
+
+    public class ElfFactory : ICharacterFactory
+    {
+        public ICharacter CreateCharacter()
+        {
+            return new Elf();
+        }
+    }
+
+    public class DwarfFactory : ICharacterFactory
+    {
+        public ICharacter CreateCharacter()
+        {
+            return new Dwarf();
+        }
+    }
 }
