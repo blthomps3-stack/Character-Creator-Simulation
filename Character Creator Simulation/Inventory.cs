@@ -11,7 +11,7 @@ namespace Character_Creator_Simulation
         public string Name { get; set; }
         public string Desc { get; set; }
 
-        public Item(string name, string desc, double value)
+        public Item(string name, string desc)
         {
             Name = name;
             Desc = desc;
@@ -40,6 +40,32 @@ namespace Character_Creator_Simulation
         {
             Name = name;
             Effect = effect;
+        }
+    }
+
+    public class WeaponAdapter : Item
+    {
+        private readonly Weapon _weapon;
+        public string Name;
+        public string Desc;
+        public WeaponAdapter(Weapon weapon) : base(weapon.Name, weapon.Type)
+        {
+            _weapon = weapon;
+            Name = weapon.Name;
+            Desc = $"A {weapon.Type} that deals {weapon.Damage} damage.";
+        }
+    }
+
+    public class PotionAdapter : Item
+    {
+        private readonly Potion _potion;
+        public string Name;
+        public string Desc;
+        public PotionAdapter (Potion potion) : base (potion.Name, potion.Effect)
+        {
+            _potion = potion;
+            Name = potion.Name;
+            Desc = $"Applies {potion.Effect} to whoever drinks it.";
         }
     }
 }
