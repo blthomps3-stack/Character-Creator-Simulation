@@ -26,5 +26,83 @@ namespace Character_Creator_Simulation
         public virtual void PrintDetails() => _character.PrintDetails();    
     }
 
-    
+    public class WizardDecorator : CharacterDecorator
+    {
+        public WizardDecorator(ICharacter character) : base(character) { character.Name += " Wizard"; character.Speed += 1; character.Intellect += 2; character.Defense -= 1; }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine("Class: Wizard");
+        }
+
+        public override void Act()
+        {
+            Console.WriteLine($"{_character.Name} casts a spell!");
+        }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{_character.Name} says magic words.");
+        }
+    }
+
+    public class FighterDecorator : CharacterDecorator
+    {
+        public FighterDecorator(ICharacter character) : base(character) { character.Name += " Fighter"; character.Agility += 1; character.Strength += 2; character.Intellect -= 1; }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine("Class: Fighter");
+        }
+
+        public override void Act()
+        {
+            Console.WriteLine($"{_character.Name} throws a punch!");
+        }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{_character.Name} says a battlecry.");
+        }
+    }
+
+    public class ClericDecorator : CharacterDecorator
+    {
+        public ClericDecorator(ICharacter character) : base(character) { character.Name += " Cleric"; character.Defense += 1; character.Health += 2; character.Speed -= 1; }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine("Class: Cleric");
+        }
+
+        public override void Act()
+        {
+            Console.WriteLine($"{_character.Name} swings a mace!");
+        }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{_character.Name} says a prayer.");
+        }
+    }
+
+    public class RogueDecorator : CharacterDecorator
+    {
+        public RogueDecorator(ICharacter character) : base(character) { character.Name += " Rogue"; character.Speed += 1; character.Agility += 2; character.Health -= 1; }
+        public override void PrintDetails()
+        {
+            base.PrintDetails();
+            Console.WriteLine("Class: Rogue");
+        }
+
+        public override void Act()
+        {
+            Console.WriteLine($"{_character.Name} tosses a dagger!");
+        }
+
+        public override void Speak()
+        {
+            Console.WriteLine($"{_character.Name} says nothing.");
+        }
+    }
 }
