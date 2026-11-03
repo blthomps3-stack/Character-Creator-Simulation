@@ -68,4 +68,31 @@ namespace Character_Creator_Simulation
             Desc = $"Applies {potion.Effect} to whoever drinks it.";
         }
     }
+
+    public class Inventory
+    {
+        public Dictionary<String, Item> Contents = new();
+        public void AddItem(Item item)
+        {
+            Contents.Add(item.Name, item);
+        }
+        public void AddItem(Weapon weapon)
+        {
+            Item item = new WeaponAdapter(weapon);
+            Contents.Add(item.Name, item);
+        }
+        public void AddItem(Potion potion)
+        {
+            Item item = new PotionAdapter(potion);
+            Contents.Add(item.Name, item);
+        }
+        public Item GetItem(String name)
+        {
+            return Contents[name];
+        }
+        public void RemoveItem(String name)
+        {
+            Contents.Remove(name);
+        }
+    }
 }
