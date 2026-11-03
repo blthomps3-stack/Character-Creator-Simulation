@@ -15,6 +15,7 @@ namespace Character_Creator_Simulation
         int Strength { get; set; }
         int Intellect { get; set; }
         int Agility { get; set; }
+        Inventory Inv { get; set; }
 
         void Act();
         void Speak();
@@ -40,6 +41,7 @@ namespace Character_Creator_Simulation
         public int Strength { get; set; } = 10;
         public int Intellect { get; set; } = 10;
         public int Agility { get; set; } = 10;
+        public Inventory Inv { get; set; } = new Inventory();
 
         public Human(string name)
         {
@@ -64,6 +66,7 @@ namespace Character_Creator_Simulation
         public int Strength { get; set; } = 8;
         public int Intellect { get; set; } = 12;
         public int Agility { get; set; } = 12;
+        public Inventory Inv { get; set; } = new Inventory();
         public Elf (string name)
         {
             Name = name;
@@ -87,6 +90,7 @@ namespace Character_Creator_Simulation
         public int Strength { get; set; } = 12;
         public int Intellect { get; set; } = 8;
         public int Agility { get; set; } = 8;
+        public Inventory Inv { get; set; } = new Inventory();
         public Dwarf(string name)
         {
             Name = name;
