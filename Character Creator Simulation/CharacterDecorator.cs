@@ -16,6 +16,8 @@ namespace Character_Creator_Simulation
         public int Strength { get { return _character.Strength; } set => _character.Strength = value; }
         public int Intellect { get { return _character.Intellect; } set => _character.Intellect = value; }
         public int Agility { get { return _character.Agility; } set => _character.Agility = value; }
+        public Inventory Inv { get { return _character.Inv; } set => _character.Inv = value; }
+        
         public CharacterDecorator(ICharacter character) 
         {
             _character = character;
