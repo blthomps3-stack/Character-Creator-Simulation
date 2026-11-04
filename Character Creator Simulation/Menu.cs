@@ -197,6 +197,7 @@ namespace Character_Creator_Simulation
                 {
                     Console.WriteLine($"{character.Name} rests.");
                     GameWorld.GetInstance().PassDay();
+                    Console.WriteLine($"Current day: Day {GameWorld.GetInstance().Days}");
                 } else if (Input == "5")
                 {
                     Console.WriteLine($"{character.Name} goes home.");
