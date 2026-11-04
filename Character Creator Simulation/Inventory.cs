@@ -48,11 +48,9 @@ namespace Character_Creator_Simulation
         private readonly Weapon _weapon;
         public string Name;
         public string Desc;
-        public WeaponAdapter(Weapon weapon) : base(weapon.Name, weapon.Type)
+        public WeaponAdapter(Weapon weapon) : base(weapon.Name, $"A {weapon.Type} that deals {weapon.Damage} damage.")
         {
             _weapon = weapon;
-            Name = weapon.Name;
-            Desc = $"A {weapon.Type} that deals {weapon.Damage} damage.";
         }
     }
 
@@ -61,38 +59,43 @@ namespace Character_Creator_Simulation
         private readonly Potion _potion;
         public string Name;
         public string Desc;
-        public PotionAdapter (Potion potion) : base (potion.Name, potion.Effect)
+        public PotionAdapter (Potion potion) : base (potion.Name, $"Applies {potion.Effect} to whoever drinks it.")
         {
             _potion = potion;
-            Name = potion.Name;
-            Desc = $"Applies {potion.Effect} to whoever drinks it.";
         }
     }
 
     public class Inventory
     {
         public Dictionary<String, Item> Contents = new();
-        public void AddItem(Item item)
+        public bool AddItem(Item item)
         {
-            Contents.Add(item.Name, item);
+            return Contents.TryAdd(item.Name, item);
         }
-        public void AddItem(Weapon weapon)
+        public bool AddItem(Weapon weapon)
         {
             Item item = new WeaponAdapter(weapon);
-            Contents.Add(item.Name, item);
+            return Contents.TryAdd(item.Name, item);
         }
-        public void AddItem(Potion potion)
+        public bool AddItem(Potion potion)
         {
             Item item = new PotionAdapter(potion);
-            Contents.Add(item.Name, item);
+            return Contents.TryAdd(item.Name, item);
         }
         public Item GetItem(String name)
         {
             return Contents[name];
         }
-        public void RemoveItem(String name)
+        public void PrintItems()
         {
-            Contents.Remove(name);
+            foreach(KeyValuePair<String, Item> kvp in Contents)
+            {
+                Console.WriteLine($"{kvp.Key}: {kvp.Value.Desc}");
+            }
+        }
+        public bool RemoveItem(String name)
+        {
+            return Contents.Remove(name);
         }
     }
 }

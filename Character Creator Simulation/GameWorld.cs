@@ -12,7 +12,7 @@ namespace Character_Creator_Simulation
         private static readonly object _lock = new object();
         private GameWorld() { }
         public string Difficulty { get; set; } = "normal";
-        public int Days { get; set; } = 0;
+        public int Days { get; set; } = 1;
         public ICharacter Character { get; set; }
         public static GameWorld GetInstance()
         {

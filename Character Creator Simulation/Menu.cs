@@ -1,0 +1,269 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Character_Creator_Simulation
+{
+    public class Menu
+    {
+        public static void Run()
+        {
+            bool Running = true;
+            string Input;
+            GameWorld GameWorld = GameWorld.GetInstance();
+            Console.WriteLine("Welcome to the character creator simulation. Select options by entering the corresponding number.");
+            while (Running)
+            {
+                Console.WriteLine("What do you want to do?");
+                Console.WriteLine("\t1. Create a new character.");
+                Console.WriteLine("\t2. Start adventuring.");
+                Console.WriteLine("\t3. Quit.");
+                Input = Console.ReadLine();
+                if(Input == "1")
+                {
+                    if(GameWorld.Character == null)
+                    {
+                        GameWorld.Character = CharacterCreation();
+                        Console.WriteLine();
+                        GameWorld.Character.PrintDetails();
+                    } else
+                    {
+                        Console.WriteLine($"Are you sure? If you do, your previous character ({GameWorld.Character.Name}) will retire from adventuring permanently.");
+                        Console.WriteLine("\t1. Yes");
+                        Console.WriteLine("\t2. No");
+                        Input = Console.ReadLine();
+                        if (Input == "1")
+                        {
+                            GameWorld.Character = CharacterCreation();
+                            Console.WriteLine();
+                            GameWorld.Character.PrintDetails();
+                        }
+                    }
+                } else if (Input == "2")
+                {
+                    if (GameWorld.Character == null)
+                    {
+                        Console.WriteLine("You must create a character first.");
+                    } else
+                    {
+                        Adventure(GameWorld.Character);
+                    }
+                } else if (Input == "3")
+                {
+                    Running = false;
+                } else
+                {
+                    Console.WriteLine("Invalid input.");
+                }
+            }
+        }
+        public static ICharacter CharacterCreation()
+        {
+            ICharacterFactory factory;
+            string Species = "";
+            string Name;
+            string Input;
+
+            bool Valid;
+            do
+            {
+                Valid = true;
+                Console.WriteLine("Step 1: Select a species. Options:");
+                Console.WriteLine("\t1. Human");
+                Console.WriteLine("\t2. Elf");
+                Console.WriteLine("\t3. Dwarf");
+                Input = Console.ReadLine();
+                if (Input == "1")
+                {
+                    Species = "Human";
+                } else if (Input == "2")
+                {
+                    Species = "Elf";
+                } else if (Input == "3")
+                {
+                    Species = "Dwarf";
+                } else
+                {
+                    Console.WriteLine("Invalid input.");
+                    Valid = false;
+                }
+            } while (!Valid);
+            do
+            {
+                Valid = true;
+                Console.WriteLine("Step 2: Enter a firstname.");
+                Name = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(Name))
+                {
+                    Console.WriteLine($"Is the name {Name} correct?");
+                    Console.WriteLine($"(Keep in mind that it will be stored and displayed as \"{Name} the {Species}\".)");
+                    Console.WriteLine("\t1. Yes");
+                    Console.WriteLine("\t2. No");
+                    Input = Console.ReadLine();
+                    if (Input != "1")
+                    {
+                        Valid = false;
+                    }
+                } else
+                {
+                    Console.WriteLine("Invalid input.");
+                    Valid = false;
+                }
+            } while (!Valid);
+
+            if(Species == "Human")
+            {
+                factory = new HumanFactory();
+            } else if (Species == "Elf")
+            {
+                factory = new ElfFactory();
+            } else if (Species == "Dwarf")
+            {
+                factory = new DwarfFactory();
+            }
+            else
+            {
+                Console.WriteLine("Error: Species was not properly set. Restarting character creation.");
+                return CharacterCreation();
+            }
+
+            ICharacter character = factory.CreateCharacter(Name);
+
+            do
+            {
+                Valid = true;
+                Console.WriteLine($"Step 3: Choose a class for {character.Name}:");
+                Console.WriteLine("\t1. Wizard");
+                Console.WriteLine("\t2. Fighter");
+                Console.WriteLine("\t3. Cleric");
+                Console.WriteLine("\t4. Rogue");
+                Input = Console.ReadLine();
+                if (Input == "1")
+                {
+                    character = new WizardDecorator(character);
+                    character.Inv.AddItem(new Weapon("Magic Staff", "Wand", character.Intellect));
+                }
+                else if (Input == "2")
+                {
+                    character = new FighterDecorator(character);
+                    character.Inv.AddItem(new Weapon("Longsword", "Sword", character.Strength));
+                }
+                else if (Input == "3")
+                {
+                    character = new ClericDecorator(character);
+                    character.Inv.AddItem(new Weapon("Mace", "Club", character.Strength));
+                }
+                else if (Input == "4")
+                {
+                    character = new RogueDecorator(character);
+                    character.Inv.AddItem(new Weapon("Throwing Knives", "Thrown Weapon", character.Agility));
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input.");
+                    Valid = false;
+                }
+            } while (!Valid);
+
+            return character;
+        }
+
+        public static void Adventure(ICharacter character)
+        {
+            bool OnAdventure = true;
+            String Input;
+            Console.WriteLine($"{character.Name} sets out on an adventure.");
+            while (OnAdventure)
+            {
+                Console.WriteLine($"What will {character.Name} do?");
+                Console.WriteLine("\t1. Act");
+                Console.WriteLine("\t2. Speak");
+                Console.WriteLine("\t3. Shop");
+                Console.WriteLine("\t4. Pass day");
+                Console.WriteLine("\t5. Go home");
+                Input = Console.ReadLine();
+                if(Input == "1")
+                {
+                    character.Act();
+                } else if (Input == "2")
+                {
+                    character.Speak();
+                } else if (Input == "3")
+                {
+                    Shop(character);
+                } else if (Input == "4")
+                {
+                    Console.WriteLine($"{character.Name} rests.");
+                    GameWorld.GetInstance().PassDay();
+                    Console.WriteLine($"Current day: Day {GameWorld.GetInstance().Days}");
+                } else if (Input == "5")
+                {
+                    Console.WriteLine($"{character.Name} goes home.");
+                    OnAdventure = false;
+                }
+            }
+        }
+
+        public static void Shop(ICharacter character)
+        {
+            string Input;
+            Inventory inv = character.Inv;
+            bool InShop = true;
+            bool Valid;
+            Console.WriteLine($"{character.Name} enters a shop.");
+            while (InShop)
+            {
+                Console.WriteLine($"What will {character.Name} do?");
+                Console.WriteLine("\t1. Buy");
+                Console.WriteLine("\t2. Sell");
+                Console.WriteLine("\t3. Exit");
+                Input = Console.ReadLine();
+                if(Input == "1")
+                {
+                    Console.WriteLine($"What will {character.Name} buy?");
+                    Console.WriteLine("\t1. Shortbow");
+                    Console.WriteLine("\t2. Healing Potion.");
+                    Console.WriteLine("\t3. Scroll");
+                    Console.WriteLine("\t4. Cancel");
+                    Input = Console.ReadLine();
+                    Valid = false;
+                    if(Input == "1")
+                    {
+                        Valid = inv.AddItem(new Weapon("Shortbow", "Bow", 8));
+                    } else if(Input == "2")
+                    {
+                        Valid = inv.AddItem(new Potion("Healing Potion", "instant healing"));
+                    } else if(Input == "3")
+                    {
+                        Valid = inv.AddItem(new Item("Scroll", "A scroll covered in unknown runes."));
+                    }
+
+                    if(Input != "4" && Valid)
+                    {
+                        Console.WriteLine("Item successfully bought");
+                    } else if (Input != "4" && !Valid)
+                    {
+                        Console.WriteLine("Item already owned.");
+                    }
+                } else if(Input == "2")
+                {
+                    Console.WriteLine("Inventory:");
+                    inv.PrintItems();
+                    Console.WriteLine("Enter the name of an item to sell it, enter anything else to cancel.");
+                    Input = Console.ReadLine();
+                    Valid = inv.RemoveItem(Input);
+                    if (Valid)
+                    {
+                        Console.WriteLine("Item sold successfully.");
+                    }
+                } else if(Input == "3")
+                {
+                    Console.WriteLine($"{character.Name} leaves.");
+                    InShop = false;
+                }
+            }
+        }
+    }
+}
