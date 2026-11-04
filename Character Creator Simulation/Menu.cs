@@ -143,18 +143,22 @@ namespace Character_Creator_Simulation
                 if (Input == "1")
                 {
                     character = new WizardDecorator(character);
+                    character.Inv.AddItem(new Weapon("Magic Staff", "Wand", character.Intellect));
                 }
                 else if (Input == "2")
                 {
                     character = new FighterDecorator(character);
+                    character.Inv.AddItem(new Weapon("Longsword", "Sword", character.Strength));
                 }
                 else if (Input == "3")
                 {
                     character = new ClericDecorator(character);
+                    character.Inv.AddItem(new Weapon("Mace", "Club", character.Strength));
                 }
                 else if (Input == "4")
                 {
                     character = new RogueDecorator(character);
+                    character.Inv.AddItem(new Weapon("Throwing Knives", "Thrown Weapon", character.Agility));
                 }
                 else
                 {
@@ -188,7 +192,7 @@ namespace Character_Creator_Simulation
                     character.Speak();
                 } else if (Input == "3")
                 {
-
+                    Shop(character);
                 } else if (Input == "4")
                 {
                     Console.WriteLine($"{character.Name} rests.");
@@ -197,6 +201,66 @@ namespace Character_Creator_Simulation
                 {
                     Console.WriteLine($"{character.Name} goes home.");
                     OnAdventure = false;
+                }
+            }
+        }
+
+        public static void Shop(ICharacter character)
+        {
+            string Input;
+            Inventory inv = character.Inv;
+            bool InShop = true;
+            bool Valid;
+            Console.WriteLine($"{character.Name} enters a shop.");
+            while (InShop)
+            {
+                Console.WriteLine($"What will {character.Name} do?");
+                Console.WriteLine("\t1. Buy");
+                Console.WriteLine("\t2. Sell");
+                Console.WriteLine("\t3. Exit");
+                Input = Console.ReadLine();
+                if(Input == "1")
+                {
+                    Console.WriteLine($"What will {character.Name} buy?");
+                    Console.WriteLine("\t1. Shortbow");
+                    Console.WriteLine("\t2. Healing Potion.");
+                    Console.WriteLine("\t3. Scroll");
+                    Console.WriteLine("\t4. Cancel");
+                    Input = Console.ReadLine();
+                    Valid = false;
+                    if(Input == "1")
+                    {
+                        Valid = inv.AddItem(new Weapon("Shortbow", "Bow", 8));
+                    } else if(Input == "2")
+                    {
+                        Valid = inv.AddItem(new Potion("Healing Potion", "instant healing"));
+                    } else if(Input == "3")
+                    {
+                        Valid = inv.AddItem(new Item("Scroll", "A scroll covered in unknown runes."));
+                    }
+
+                    if(Input != "4" && Valid)
+                    {
+                        Console.WriteLine("Item successfully bought");
+                    } else if (Input != "4" && !Valid)
+                    {
+                        Console.WriteLine("Item already owned.");
+                    }
+                } else if(Input == "2")
+                {
+                    Console.WriteLine("Inventory:");
+                    inv.PrintItems();
+                    Console.WriteLine("Enter the name of an item to sell it, enter anything else to cancel.");
+                    Input = Console.ReadLine();
+                    Valid = inv.RemoveItem(Input);
+                    if (Valid)
+                    {
+                        Console.WriteLine("Item sold successfully.");
+                    }
+                } else if(Input == "3")
+                {
+                    Console.WriteLine($"{character.Name} leaves.");
+                    InShop = false;
                 }
             }
         }
