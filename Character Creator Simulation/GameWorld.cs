@@ -26,6 +26,6 @@ namespace Character_Creator_Simulation
             return _instance;
         }
 
-        public void Log
+
     }
 }
