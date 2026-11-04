@@ -43,7 +43,13 @@ namespace Character_Creator_Simulation
                     }
                 } else if (Input == "2")
                 {
-
+                    if (GameWorld.Character == null)
+                    {
+                        Console.WriteLine("You must create a character first.");
+                    } else
+                    {
+                        Adventure(GameWorld.Character);
+                    }
                 } else if (Input == "3")
                 {
                     Running = false;
@@ -158,6 +164,41 @@ namespace Character_Creator_Simulation
             } while (!Valid);
 
             return character;
+        }
+
+        public static void Adventure(ICharacter character)
+        {
+            bool OnAdventure = true;
+            String Input;
+            Console.WriteLine($"{character.Name} sets out on an adventure.");
+            while (OnAdventure)
+            {
+                Console.WriteLine($"What will {character.Name} do?");
+                Console.WriteLine("\t1. Act");
+                Console.WriteLine("\t2. Speak");
+                Console.WriteLine("\t3. Shop");
+                Console.WriteLine("\t4. Pass day");
+                Console.WriteLine("\t5. Go home");
+                Input = Console.ReadLine();
+                if(Input == "1")
+                {
+                    character.Act();
+                } else if (Input == "2")
+                {
+                    character.Speak();
+                } else if (Input == "3")
+                {
+
+                } else if (Input == "4")
+                {
+                    Console.WriteLine($"{character.Name} rests.");
+                    GameWorld.GetInstance().PassDay();
+                } else if (Input == "5")
+                {
+                    Console.WriteLine($"{character.Name} goes home.");
+                    OnAdventure = false;
+                }
+            }
         }
     }
 }
