@@ -18,9 +18,8 @@ namespace Character_Creator_Simulation
             {
                 Console.WriteLine("What do you want to do?");
                 Console.WriteLine("\t1. Create a new character.");
-                Console.WriteLine("\t2. Choose a class.");
-                Console.WriteLine("\t3. Start adventuring.");
-                Console.WriteLine("\t4. Quit.");
+                Console.WriteLine("\t2. Start adventuring.");
+                Console.WriteLine("\t3. Quit.");
                 Input = Console.ReadLine();
                 if(Input == "1")
                 {
@@ -44,14 +43,8 @@ namespace Character_Creator_Simulation
                     }
                 } else if (Input == "2")
                 {
-                    if (GameWorld.Character == null)
-                    {
-                        Console.WriteLine("You need to create a character first.");
-                    }
-                } else if (Input == "3")
-                {
 
-                } else if (Input == "4")
+                } else if (Input == "3")
                 {
                     Running = false;
                 } else
@@ -130,7 +123,41 @@ namespace Character_Creator_Simulation
                 return CharacterCreation();
             }
 
-            return factory.CreateCharacter(Name);
+            ICharacter character = factory.CreateCharacter(Name);
+
+            do
+            {
+                Valid = true;
+                Console.WriteLine($"Step 3: Choose a class for {character.Name}:");
+                Console.WriteLine("\t1. Wizard");
+                Console.WriteLine("\t2. Fighter");
+                Console.WriteLine("\t3. Cleric");
+                Console.WriteLine("\t4. Rogue");
+                Input = Console.ReadLine();
+                if (Input == "1")
+                {
+                    character = new WizardDecorator(character);
+                }
+                else if (Input == "2")
+                {
+                    character = new FighterDecorator(character);
+                }
+                else if (Input == "3")
+                {
+                    character = new ClericDecorator(character);
+                }
+                else if (Input == "4")
+                {
+                    character = new RogueDecorator(character);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input.");
+                    Valid = false;
+                }
+            } while (!Valid);
+
+            return character;
         }
     }
 }
