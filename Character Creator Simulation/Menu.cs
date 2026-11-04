@@ -16,10 +16,50 @@ namespace Character_Creator_Simulation
             Console.WriteLine("Welcome to the character creator simulation. Select options by entering the corresponding number.");
             while (Running)
             {
+                Console.WriteLine("What do you want to do?");
+                Console.WriteLine("\t1. Create a new character.");
+                Console.WriteLine("\t2. Choose a class.");
+                Console.WriteLine("\t3. Start adventuring.");
+                Console.WriteLine("\t4. Quit.");
+                Input = Console.ReadLine();
+                if(Input == "1")
+                {
+                    if(GameWorld.Character == null)
+                    {
+                        GameWorld.Character = CharacterCreation();
+                        Console.WriteLine();
+                        GameWorld.Character.PrintDetails();
+                    } else
+                    {
+                        Console.WriteLine($"Are you sure? If you do, your previous character ({GameWorld.Character.Name}) will retire from adventuring permanently.");
+                        Console.WriteLine("\t1. Yes");
+                        Console.WriteLine("\t2. No");
+                        Input = Console.ReadLine();
+                        if (Input == "1")
+                        {
+                            GameWorld.Character = CharacterCreation();
+                            Console.WriteLine();
+                            GameWorld.Character.PrintDetails();
+                        }
+                    }
+                } else if (Input == "2")
+                {
+                    if (GameWorld.Character == null)
+                    {
+                        Console.WriteLine("You need to create a character first.");
+                    }
+                } else if (Input == "3")
+                {
 
+                } else if (Input == "4")
+                {
+                    Running = false;
+                } else
+                {
+                    Console.WriteLine("Invalid input.");
+                }
             }
         }
-
         public static ICharacter CharacterCreation()
         {
             ICharacterFactory factory;
